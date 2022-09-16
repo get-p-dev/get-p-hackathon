@@ -1,5 +1,6 @@
 import { BuildingOffice2Icon, UsersIcon } from "@heroicons/react/24/outline";
-import { useRouter } from "next/router";
+import axios from "axios";
+import { NextRouter, useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import Logo from "../../components/common/logo";
 
@@ -10,10 +11,11 @@ export type SignInProps = {
   type: string;
 };
 
-async function onValid(data: SignInProps) {
+async function onValid(data: SignInProps, router: NextRouter) {
   const { email, password } = data;
   const req = { email, password };
-  console.log(req);
+  const res = await axios.post("http://localhost:8080/users", req);
+  router.push(`/profile/${data.type}`);
   // POST to server
 }
 
@@ -35,10 +37,7 @@ export default function SignUp() {
           </figure>
           <h2 className="card-title pt-8">회원가입</h2>
           <form
-            onSubmit={handleSubmit(async (data) => {
-              const res = await onValid(data);
-              router.push(`/profile/${data.type}`);
-            })}
+            onSubmit={handleSubmit((data) => onValid(data, router))}
             className="flex flex-col gap-4"
           >
             <div className="form-control w-full max-w-lg">

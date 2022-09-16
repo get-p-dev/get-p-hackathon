@@ -1,5 +1,7 @@
+import axios from "axios";
 import { useRouter } from "next/router";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useCookies } from "react-cookie";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Logo from "../../components/common/logo";
 
@@ -16,9 +18,23 @@ const CompanyProfileSchema = z.object({
 
 type CompanyProfileProps = z.infer<typeof CompanyProfileSchema>;
 
-const onValid: SubmitHandler<CompanyProfileProps> = (data) => {
+async function onValid(
+  data: CompanyProfileProps,
+  cookie: string
+): Promise<any> {
   console.log(data);
-};
+  // 1. 쿠키에 있는 토큰을 가져온다.
+  // 2. 토큰을 헤더에 넣어서 요청을 보낸다.
+  // 3. 요청이 성공하면 프로필 사진 등록 페이지로 이동한다.
+  try {
+    const res = await axios.post("http://localhost:8080/company", data, {
+      headers: { Authorization: `Bearer ${cookie}` },
+    });
+    return res;
+  } catch (err) {
+    return err;
+  }
+}
 
 export default function Company() {
   const {
@@ -28,6 +44,7 @@ export default function Company() {
     formState: { errors },
   } = useForm<CompanyProfileProps>();
   const router = useRouter();
+  const [cookie] = useCookies(["token"]);
 
   return (
     <main className="grid h-screen place-items-center px-4 lg:px-0">
@@ -39,8 +56,11 @@ export default function Company() {
           <h2 className="card-title pt-8">의뢰자 프로필 등록</h2>
           <form
             onSubmit={handleSubmit(async (data) => {
-              const res = await onValid(data);
-              router.push(`/`);
+              const res = await onValid(data, cookie.token);
+              const successful = res.status >= 200 && res.status < 300;
+              if (successful) {
+                http: router.push("/profile/picture");
+              }
             })}
             className="flex flex-col gap-4"
           >
@@ -96,7 +116,7 @@ export default function Company() {
                 type="text"
                 placeholder="회사의 웹사이트 주소를 입력하세요"
                 className="input input-bordered w-full max-w-lg"
-                {...register("address", { required: true })}
+                {...register("url", { required: true })}
               />
               <label className="label">
                 <span className="label-text">회사 주소</span>

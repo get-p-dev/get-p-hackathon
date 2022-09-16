@@ -1,16 +1,15 @@
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import Logo from "../../components/common/logo";
+import axios from "axios";
+import { useQuery } from "react-query";
+import { useState } from "react";
+import { useCookies } from "react-cookie";
 
 export type SignInProps = {
   email: string;
   password: string;
 };
-
-function onValid(data: SignInProps) {
-  console.log(data);
-  // POST to server
-}
 
 export default function Signin() {
   const {
@@ -18,6 +17,31 @@ export default function Signin() {
     handleSubmit,
     formState: { errors },
   } = useForm<SignInProps>();
+  const [request, setRequest] = useState<SignInProps | undefined>(undefined);
+
+  const [cookie, setCookie] = useCookies(["token"]);
+
+  const { isFetching } = useQuery(
+    ["signin", request],
+    async (request) => {
+      setTimeout(() => {
+        console.log(request.queryKey[1]);
+        axios
+          .post("http://localhost:8080/auth/login", request.queryKey[1])
+          .then((res) => {
+            console.log(res);
+            setCookie("token", res.data.accessToken, {
+              path: "/",
+              secure: true,
+              sameSite: "none",
+            });
+          });
+      }, 3000);
+    },
+    {
+      enabled: !!request,
+    }
+  );
 
   return (
     <>
@@ -29,7 +53,9 @@ export default function Signin() {
             </figure>
             <h2 className="card-title pt-8">로그인</h2>
             <form
-              onSubmit={handleSubmit(onValid)}
+              onSubmit={handleSubmit((signinData: SignInProps) =>
+                setRequest(signinData)
+              )}
               className="flex flex-col gap-4"
             >
               <div className="form-control w-full max-w-lg">
@@ -54,7 +80,7 @@ export default function Signin() {
               </div>
               <div className="card-actions">
                 <button className="btn btn-primary w-full text-base">
-                  로그인
+                  로그인 {isFetching && "중"}
                 </button>
               </div>
               <div className="card-actions">

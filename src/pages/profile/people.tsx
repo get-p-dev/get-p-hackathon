@@ -1,11 +1,11 @@
-import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { XMarkIcon } from "@heroicons/react/20/solid";
+import axios from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useCookies } from "react-cookie";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Logo from "../../components/common/logo";
-import { hslMaker } from "../../utils";
+import TagInput from "../../components/input/tag-input";
 
 const PeopleProfileSchema = z.object({
   name: z.string(),
@@ -21,9 +21,14 @@ const PeopleProfileSchema = z.object({
 
 type PeopleProfileProps = z.infer<typeof PeopleProfileSchema>;
 
-const onValid: SubmitHandler<PeopleProfileProps> = (data) => {
-  console.log(data);
-};
+async function onValid(data: PeopleProfileProps, cookie: string) {
+  try {
+    const res = await axios.post("http://localhost:8080/people", data, {
+      headers: { Authorization: `Bearer ${cookie}` },
+    });
+    return res;
+  } catch (err) {}
+}
 
 export default function People() {
   const {
@@ -33,11 +38,8 @@ export default function People() {
     formState: { errors },
   } = useForm<PeopleProfileProps>();
   const router = useRouter();
-  const [animationRef] = useAutoAnimate<HTMLUListElement>();
-  const [selectedTag, setSelectedTag] = useState<
-    { content: string; color: string }[]
-  >([]);
-  const [tag, setTag] = useState("");
+  const [selectedTag, setSelectedTag] = useState<string[]>([]);
+  const [cookie] = useCookies(["token"]);
 
   return (
     <main className="my-4 grid h-screen place-items-center px-4 lg:px-0">
@@ -49,8 +51,11 @@ export default function People() {
           <h2 className="card-title pt-8">피플 프로필 등록</h2>
           <form
             onSubmit={handleSubmit(async (data) => {
-              const res = await onValid(data);
-              router.push(`/`);
+              const res: any = await onValid(data, cookie.token);
+              const successful = res.status >= 200 && res.status < 300;
+              if (successful) {
+                router.push("/profile/picture");
+              }
             })}
             className="flex flex-col gap-4"
           >
@@ -64,6 +69,7 @@ export default function People() {
                 className="input input-bordered w-full max-w-lg"
                 {...register("name", { required: true })}
               />
+
               <label className="label">
                 <span className="label-text">학교</span>
               </label>
@@ -73,6 +79,7 @@ export default function People() {
                 className="input input-bordered w-full max-w-lg"
                 {...register("school", { required: true })}
               />
+
               <label className="label">
                 <span className="label-text">전공</span>
               </label>
@@ -82,6 +89,7 @@ export default function People() {
                 className="input input-bordered w-full max-w-lg"
                 {...register("major", { required: true })}
               />
+
               <label className="label">
                 <span className="label-text">활동 지역</span>
               </label>
@@ -91,6 +99,7 @@ export default function People() {
                 className="input input-bordered w-full max-w-lg"
                 {...register("activityArea", { required: true })}
               />
+
               <label className="label">
                 <span className="label-text">소개 및 설명</span>
               </label>
@@ -99,6 +108,7 @@ export default function People() {
                 className="textarea textarea-bordered w-full max-w-lg"
                 {...register("introduction", { required: true })}
               />
+
               <label className="label">
                 <span className="label-text">포트폴리오</span>
               </label>
@@ -108,11 +118,12 @@ export default function People() {
                 className="input input-bordered w-full max-w-lg"
                 {...register("portfolio", { required: true })}
               />
+
               <label className="label">
                 <span className="label-text">전화번호</span>
               </label>
               <input
-                type="text"
+                type="tel"
                 placeholder="전화번호를 입력하세요"
                 className="input input-bordered w-full max-w-lg"
                 {...register("phoneNumber", { required: true })}
@@ -124,55 +135,11 @@ export default function People() {
                 </span>
               </label>
 
-              <div className="textarea textarea-bordered ">
-                <ul className="flex flex-wrap gap-1 pt-1" ref={animationRef}>
-                  {selectedTag.map((tag) => (
-                    <li
-                      key={`${tag.content}`}
-                      style={{
-                        backgroundColor: tag.color || hslMaker(tag.content),
-                      }}
-                      className={`flex h-fit w-fit cursor-pointer select-none flex-row gap-2 rounded-lg px-2 py-1 text-base-100`}
-                      onClick={() => {
-                        setSelectedTag(
-                          selectedTag.filter((t) => t.content !== tag.content)
-                        );
-                      }}
-                    >
-                      <p className="shrink-0">{tag.content}</p>
-                      <XMarkIcon className="w-4 shrink-0" />
-                    </li>
-                  ))}
-                  {selectedTag.length < 8 && (
-                    <input
-                      {...register("tags")}
-                      placeholder="태그를 입력해주세요."
-                      className="h-fit w-fit border-white py-1 px-2 outline-none ring-white"
-                      disabled={selectedTag.length >= 8}
-                      value={tag}
-                      onKeyPress={(e) => {
-                        if (selectedTag.length >= 8) return;
-                        if (e.key === "Enter") {
-                          e.preventDefault();
-                          if (!tag) return;
-                          if (selectedTag.find((t) => t.content === tag))
-                            return;
-                          setSelectedTag((prev) => [
-                            ...prev,
-                            { content: tag, color: hslMaker(tag) },
-                          ]);
-                          setTag("");
-                        }
-                        return;
-                      }}
-                      onChange={(e) => {
-                        if (selectedTag.length >= 8) return;
-                        setTag(e.target.value);
-                      }}
-                    />
-                  )}
-                </ul>
-              </div>
+              <TagInput
+                register={register("tags")}
+                selectedTag={selectedTag}
+                setSelectedTag={setSelectedTag}
+              />
             </div>
             <div className="card-actions">
               <button className="btn btn-primary w-full text-base">
