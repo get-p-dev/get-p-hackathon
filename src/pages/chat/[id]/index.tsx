@@ -5,6 +5,9 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { PaperAirplaneIcon, PlusIcon } from "@heroicons/react/24/outline";
 import Message from "../../../components/chat/chat";
 import { BodyLayout } from "../../../components/common/bodylayout";
+import pusherJs from "pusher-js";
+import axios from "axios";
+import { Cookies, useCookies } from "react-cookie";
 
 export interface ChatInputs {
   chat: string;
@@ -28,6 +31,7 @@ const ProjectUserChat = () => {
   const { register, handleSubmit, watch, resetField } = useForm<ChatProps>({
     mode: "onSubmit",
   });
+  const [cookies] = useCookies(["token"]);
 
   // * change with real server call
   const currentUser = {
@@ -38,7 +42,7 @@ const ProjectUserChat = () => {
 
   const [data, setData] = React.useState<ChatProps[]>([] as ChatProps[]);
 
-  const onValid: SubmitHandler<ChatProps> = (data) => {
+  const onValid: SubmitHandler<ChatProps> = async (data) => {
     console.log("hi");
     console.log(data);
     const newChat = {
@@ -46,14 +50,35 @@ const ProjectUserChat = () => {
       chat: data.chat,
       createdAt: new Date().toTimeString().split(" ")[0],
     } as ChatProps;
-    setData((prev) => {
-      return prev && [...prev, newChat];
-    });
+
+    await axios.post(
+      "http://localhost:8080/pusher/messages",
+      { message: newChat },
+      {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`,
+        },
+      }
+    );
     resetField("chat");
     scrollRef?.current?.scrollIntoView();
   };
 
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const pusher = new pusherJs("e1995a9688b13e4fb55e", {
+      cluster: "ap3",
+    });
+    console.log(id);
+    const channel = pusher.subscribe(id as string);
+    channel.bind("message", function (data: any) {
+      setData((prev) => {
+        console.log(data);
+        return prev && [...prev, data];
+      });
+    });
+  });
 
   return (
     <BodyLayout>
