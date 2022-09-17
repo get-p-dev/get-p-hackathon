@@ -1,3 +1,8 @@
+import axios from "axios";
+import { profile } from "console";
+import Link from "next/link";
+import { useCookies } from "react-cookie";
+import { useQuery } from "react-query";
 import ProfileList from "./profile-list";
 
 export type ProfileListProps = {
@@ -8,23 +13,66 @@ export type ProfileListProps = {
 const profile_dummy = [
   { name: "마이페이지", href: "/mypage" },
   { name: "설정", href: "/settings" },
-  { name: "로그아웃", href: "/auth/logout" },
 ];
 
+// [GET] http://localhost:8080/user/image with cookie -> return image filename
 export default function ProfileButton() {
+  const [cookie, setCookie, removeCookie] = useCookies(["token"]);
+
+  const { data: filename } = useQuery(
+    "filename",
+    async () => {
+      const res = await axios.get("http://localhost:8080/users/image", {
+        headers: {
+          Authorization: `Bearer ${cookie.token}`,
+        },
+      });
+      return res.data.image;
+    },
+    {
+      enabled: !!cookie.token,
+    }
+  );
+
+  const { data: profileImage, isLoading } = useQuery(
+    "profileImage",
+    async () => {
+      const res = await axios.get(`http://localhost:8080/images/${filename}`, {
+        responseType: "blob",
+      });
+      return URL.createObjectURL(
+        new Blob([res.data], { type: res.headers["content-type"] })
+      );
+    },
+    {
+      enabled: !!filename,
+    }
+  );
+
   return (
     <div className="dropdown-end dropdown">
       <label tabIndex={0} className="avatar btn btn-ghost btn-circle">
         <div className="w-10 rounded-full">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="https://placeimg.com/80/80/people" alt="profile" />
+          <img src={isLoading ? "/profile.svg" : profileImage} alt="profile" />
         </div>
       </label>
       <ul
         tabIndex={0}
-        className="dropdown-content menu menu-compact mt-3 w-52 rounded-lg border-2 bg-base-100 p-2 shadow-lg"
+        className="dropdown-content menu menu-compact mt-3 w-52 rounded-lg border-2 bg-base-100 p-2
+             shadow-lg"
       >
         <ProfileList profileList={profile_dummy} />
+        <li>
+          <button
+            className="text-base"
+            onClick={() => {
+              removeCookie("token", { path: "/" });
+            }}
+          >
+            로그아웃
+          </button>
+        </li>
       </ul>
     </div>
   );

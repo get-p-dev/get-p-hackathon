@@ -1,4 +1,5 @@
 import { BellIcon } from "@heroicons/react/24/outline";
+import { useCookies } from "react-cookie";
 import NotificationList from "./notification-list";
 
 export type NotificationListProps = {
@@ -61,14 +62,15 @@ const notifications_dummy = [
   },
 ];
 
-function useNotification({ token }: { token: string }) {
+function useNotification({ token }: { token: string | null }) {
   // fetch notifications using userID
   return notifications_dummy;
 }
 
 export default function NotificationButton() {
-  const token = { token: "JWT-Token" };
-  const notifications = useNotification(token);
+  const [cookie] = useCookies(["token"]);
+
+  const notifications = useNotification(cookie?.token || "");
 
   return (
     <div className="dropdown-end dropdown">

@@ -5,6 +5,8 @@ import axios from "axios";
 import { useQuery } from "react-query";
 import { useState } from "react";
 import { useCookies } from "react-cookie";
+import { router } from "@trpc/server";
+import { useRouter } from "next/router";
 
 export type SignInProps = {
   email: string;
@@ -17,35 +19,13 @@ export default function Signin() {
     handleSubmit,
     formState: { errors },
   } = useForm<SignInProps>();
-  const [request, setRequest] = useState<SignInProps | undefined>(undefined);
+  const router = useRouter();
 
   const [cookie, setCookie] = useCookies(["token"]);
 
-  const { isFetching } = useQuery(
-    ["signin", request],
-    async (request) => {
-      setTimeout(() => {
-        console.log(request.queryKey[1]);
-        axios
-          .post("http://localhost:8080/auth/login", request.queryKey[1])
-          .then((res) => {
-            console.log(res);
-            setCookie("token", res.data.accessToken, {
-              path: "/",
-              secure: true,
-              sameSite: "none",
-            });
-          });
-      }, 3000);
-    },
-    {
-      enabled: !!request,
-    }
-  );
-
   return (
     <>
-      <main className="grid h-screen place-items-center px-4 lg:px-0">
+      <main className="grid place-items-center py-8 px-4 lg:px-0">
         <div className="p- card w-full max-w-lg border-2 bg-base-100 shadow-xl">
           <div className="card-body">
             <figure>
@@ -53,9 +33,19 @@ export default function Signin() {
             </figure>
             <h2 className="card-title pt-8">로그인</h2>
             <form
-              onSubmit={handleSubmit((signinData: SignInProps) =>
-                setRequest(signinData)
-              )}
+              onSubmit={handleSubmit((signinData: SignInProps) => {
+                axios
+                  .post("http://localhost:8080/auth/login", signinData)
+                  .then((res) => {
+                    console.log(res);
+                    setCookie("token", res.data.accessToken, {
+                      path: "/",
+                      secure: true,
+                      sameSite: "none",
+                    });
+                  })
+                  .then(() => router.push("/"));
+              })}
               className="flex flex-col gap-4"
             >
               <div className="form-control w-full max-w-lg">
@@ -80,7 +70,7 @@ export default function Signin() {
               </div>
               <div className="card-actions">
                 <button className="btn btn-primary w-full text-base">
-                  로그인 {isFetching && "중"}
+                  로그인
                 </button>
               </div>
               <div className="card-actions">

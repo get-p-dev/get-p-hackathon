@@ -44,7 +44,7 @@ export default function Picture() {
   console.log(watch("profilePicture"));
 
   return (
-    <main className="my-4 grid h-screen place-items-center px-4 lg:px-0">
+    <main className="my-4 grid place-items-center px-4 py-8 lg:px-0">
       <div className="card w-full max-w-lg border-2 bg-base-100 shadow-xl">
         <div className="card-body">
           <figure className="flex w-full justify-center">

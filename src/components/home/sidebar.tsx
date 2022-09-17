@@ -10,7 +10,7 @@ const sidebarContent = [
 
 export default function Sidebar() {
   return (
-    <ul className="menu w-60 overflow-y-auto bg-base-100 p-4 text-base-content lg:border-2">
+    <ul className="menu w-60 overflow-y-auto border-2 border-t-0 bg-base-100 p-4 text-base-content">
       {/* <!-- Sidebar content here --> */}
       {sidebarContent.map((item) => {
         return (

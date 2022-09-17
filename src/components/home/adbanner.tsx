@@ -1,3 +1,7 @@
+import {
+  ArrowLeftCircleIcon,
+  ArrowRightCircleIcon,
+} from "@heroicons/react/20/solid";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
@@ -46,8 +50,9 @@ const CardLink: React.FC<bannerProps & { size: boolean }> = ({
 }) => {
   return (
     <>
-      <Link href={props.url}>
+      <Link href={props.url} passHref>
         <a
+          target="_blank"
           className={`relative aspect-[16/9] w-full shrink-0 cursor-pointer overflow-hidden rounded-lg border-2 transition-transform duration-500 ease-out ${
             size ? "shadow-xl" : "shadow-none"
           }`}
@@ -74,17 +79,17 @@ const ArrowButton = ({
 }) => {
   return (
     <button
-      className={`absolute top-[50%] z-10 -translate-y-1/2 rounded-full bg-white/50 p-4 transition-colors ease-in-out hover:bg-white/80`}
+      className={`absolute top-[50%] z-10 -translate-y-1/2 rounded-full border-2 bg-black/50 p-1 transition-colors ease-in-out hover:bg-black/90`}
       style={{ [dir]: "1rem" }}
     >
       {dir === "left" ? (
-        <ChevronLeftIcon
-          className="h-6 w-6 text-base-100"
+        <ArrowLeftCircleIcon
+          className="h-12 w-12 text-base-200"
           onClick={() => handleClick(dir)}
         />
       ) : (
-        <ChevronRightIcon
-          className="h-6 w-6 text-base-100"
+        <ArrowRightCircleIcon
+          className="h-12 w-12 text-base-200"
           onClick={() => handleClick(dir)}
         />
       )}
@@ -119,22 +124,24 @@ const AdBanner = () => {
   };
 
   return (
-    <section className="relative mx-auto w-full max-w-2xl scroll-mx-6 overflow-visible scroll-smooth py-4">
-      <p className="md:text-md pointer-events-none absolute right-5 top-7 z-10 rounded-full bg-white/20 px-3 py-1 text-xs text-gray-100/90">{`${
-        slide + 1
-      }/${banners.length}`}</p>
+    <section className="relative mx-auto w-full scroll-mx-6 overflow-hidden scroll-smooth py-4">
+      <div className="relative mx-auto w-full max-w-2xl">
+        <p className="md:text-md pointer-events-none absolute right-5 top-4 z-10 rounded-full border-2 bg-black/50 px-3 py-1 text-xs text-base-100">{`${
+          slide + 1
+        }/${banners.length}`}</p>
 
-      <ArrowButton dir="right" handleClick={handleClick} />
-      <ArrowButton dir="left" handleClick={handleClick} />
+        <ArrowButton dir="right" handleClick={handleClick} />
+        <ArrowButton dir="left" handleClick={handleClick} />
 
-      <div
-        className={`z-0 flex flex-row gap-4 px-2 transition-all duration-300 ease-in-out`}
-        style={{ transform: `translateX(-${slide}00%)` }}
-      >
-        {banners.map((banner, index) => {
-          const size = index === slide;
-          return <CardLinkMemo props={banner} size={size} key={banner.id} />;
-        })}
+        <div
+          className={`z-0 flex flex-row gap-4 px-2 transition-all duration-300 ease-in-out`}
+          style={{ transform: `translateX(-${slide}00%)` }}
+        >
+          {banners.map((banner, index) => {
+            const size = index === slide;
+            return <CardLinkMemo props={banner} size={size} key={banner.id} />;
+          })}
+        </div>
       </div>
     </section>
   );

@@ -47,7 +47,7 @@ export default function Company() {
   const [cookie] = useCookies(["token"]);
 
   return (
-    <main className="grid h-screen place-items-center px-4 lg:px-0">
+    <main className="grid place-items-center py-8 px-4 lg:px-0">
       <div className="p- card w-full max-w-lg border-2 bg-base-100 shadow-xl">
         <div className="card-body">
           <figure>

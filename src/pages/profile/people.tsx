@@ -15,13 +15,14 @@ const PeopleProfileSchema = z.object({
   introduction: z.string(),
   portfolio: z.string(),
   phoneNumber: z.string(),
-  tags: z.array(z.string()),
+  hashtags: z.array(z.string()),
   userObjectId: z.string(),
 });
 
 type PeopleProfileProps = z.infer<typeof PeopleProfileSchema>;
 
 async function onValid(data: PeopleProfileProps, cookie: string) {
+  console.log(data);
   try {
     const res = await axios.post("http://localhost:8080/people", data, {
       headers: { Authorization: `Bearer ${cookie}` },
@@ -42,7 +43,7 @@ export default function People() {
   const [cookie] = useCookies(["token"]);
 
   return (
-    <main className="my-4 grid h-screen place-items-center px-4 lg:px-0">
+    <main className="my-4 grid place-items-center py-8 px-4 lg:px-0">
       <div className="card w-full max-w-lg border-2 bg-base-100 shadow-xl">
         <div className="card-body">
           <figure className="flex w-full justify-center">
@@ -51,8 +52,11 @@ export default function People() {
           <h2 className="card-title pt-8">피플 프로필 등록</h2>
           <form
             onSubmit={handleSubmit(async (data) => {
-              const res: any = await onValid(data, cookie.token);
-              const successful = res.status >= 200 && res.status < 300;
+              const req = { ...data, hashtags: selectedTag };
+              const res: any = await onValid(req, cookie.token);
+              const successful = res
+                ? res.status >= 200 && res.status < 300
+                : false;
               if (successful) {
                 router.push("/profile/picture");
               }
@@ -136,7 +140,7 @@ export default function People() {
               </label>
 
               <TagInput
-                register={register("tags")}
+                register={register("hashtags")}
                 selectedTag={selectedTag}
                 setSelectedTag={setSelectedTag}
               />
