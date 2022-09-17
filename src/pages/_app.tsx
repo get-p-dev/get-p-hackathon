@@ -1,27 +1,20 @@
 // src/pages/_app.tsx
-import { ReactQueryDevtools } from "react-query/devtools";
 import { httpBatchLink } from "@trpc/client/links/httpBatchLink";
 import { loggerLink } from "@trpc/client/links/loggerLink";
 import { withTRPC } from "@trpc/next";
 import type { AppType } from "next/dist/shared/lib/utils";
-import { QueryClient, QueryClientProvider } from "react-query";
 import superjson from "superjson";
 import { Header } from "../components/common/head";
 import type { AppRouter } from "../server/router";
 import "../styles/globals.css";
 import { CookiesProvider } from "react-cookie";
 
-const queryClient = new QueryClient();
-
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <CookiesProvider>
-        <Header />
-        <Component {...pageProps} />
-        <ReactQueryDevtools initialIsOpen={false} />
-      </CookiesProvider>
-    </QueryClientProvider>
+    <CookiesProvider>
+      <Header />
+      <Component {...pageProps} />
+    </CookiesProvider>
   );
 };
 

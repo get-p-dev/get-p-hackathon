@@ -6,5 +6,7 @@ export const getAsciiSum = (str: string) => {
 
 export const hslMaker = (input: string) => {
   const h = Math.floor(getAsciiSum(input.slice(-3)) + 175);
-  return `hsl(${h}, 65%, 65%)`;
+  const s = Math.floor(getAsciiSum(input.slice(-3)) + 50);
+  const l = Math.floor(getAsciiSum(input.slice(-3)) / 2 + 50);
+  return `hsl(${h}, ${s}%, ${l}%)`;
 };

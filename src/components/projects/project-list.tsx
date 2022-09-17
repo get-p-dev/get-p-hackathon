@@ -1,5 +1,4 @@
 import axios from "axios";
-import Link from "next/link";
 import React from "react";
 import { useQuery } from "react-query";
 import { z } from "zod";
@@ -10,19 +9,21 @@ const ProjectSchema = z.object({
   applicationDeadline: z.date(),
   startDate: z.date(),
   endDate: z.date(),
+  category: z.string(),
   field: z.string(),
   location: z.string(),
   title: z.string(),
-  meeting: z.number(),
+  introduction: z.string(),
+  meeting: z.string(),
   hashtags: z.array(z.string()),
   successPay: z.number(),
+  company: z.any(),
   likes: z.number(),
 });
 
 export type ProjectProps = z.infer<typeof ProjectSchema>;
 
 const ProjectList = () => {
-  // [GET] http://localhost:8080/projects
   const { data: projects, isLoading: isProjectLoading } = useQuery<
     ProjectProps[]
   >("project-list", async () => {

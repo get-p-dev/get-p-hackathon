@@ -6,6 +6,7 @@ import { useCookies } from "react-cookie";
 import { useQuery } from "react-query";
 import { BodyLayout } from "../../../components/common/bodylayout";
 import LikeButton from "../../../components/common/like-button";
+import TagList from "../../../components/common/tag-list";
 import { ProjectProps } from "../../../components/projects/project-list";
 
 async function handleClick(id: string, token: string) {
@@ -48,29 +49,37 @@ export default function ProjectDetail() {
 
   return (
     <BodyLayout>
-      <section className="relative flex flex-col gap-4 border-gray-100 px-4 py-6 pb-24 sm:pb-0">
-        <div className="flex flex-row items-center gap-2">
-          <span className="rounded-md bg-blue-600 px-2 py-1 text-xs font-light text-white">
+      <section className="relative mx-auto flex w-full max-w-6xl flex-col gap-4 border-gray-100 px-4 py-6 pb-24 sm:pb-0">
+        <div className="flex flex-row items-center gap-3">
+          <span className="rounded-md bg-blue-600 px-2 py-1 text-xs font-semibold text-white">
             D-
             {project
               ? new Date().getDate() -
                 new Date(project?.applicationDeadline).getDate()
               : 0}
           </span>
-          <p className="grow-0 text-sm text-gray-400">
+          <div className="flex flex-row items-center justify-between gap-2">
+            <div className="flex h-7 w-7 flex-row items-center gap-2 overflow-hidden rounded-full bg-white">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`/${project?.location.slice(0, 4)}.png`}
+                alt={project?.location.slice(0, 4)}
+              />
+            </div>
+          </div>
+          <p className="grow-0 text-sm text-gray-400">{project?.location}</p>
+          <p className="flex grow font-semibold text-orange-400">
             {project?.meeting} 미팅
           </p>
         </div>
         <div className="text-2xl font-bold">{project?.title}</div>
         <div className="flex flex-row gap-2 border-b-2 border-gray-100 pb-4 text-sm text-gray-400">
-          {project?.hashtags?.map((data, index) => {
-            return <p key={index}>{data}</p>;
-          })}
+          <TagList tags={project?.hashtags} />
         </div>
         <div className="flex flex-row items-center justify-between">
           <div className="text-md flex flex-row items-center gap-2 text-gray-500">
             <BuildingOffice2Icon className="h-6 w-6" />
-            {project?.title}
+            {project?.company?.name}
           </div>
           <div className="flex flex-row items-center gap-1">
             <div className="relative flex aspect-square h-6 w-6 items-center">
@@ -89,9 +98,21 @@ export default function ProjectDetail() {
           </div>
         </div>
         <div className="space-y-4">
-          <h3 className="font-bold text-gray-600">상세 설명</h3>
+          <h3 className="font-bold text-gray-600">유형</h3>
+          <div className="whitespace-pre-wrap rounded-lg bg-gray-50 p-4 leading-5">
+            {project?.category}
+          </div>
+        </div>
+        <div className="space-y-4">
+          <h3 className="font-bold text-gray-600">분야</h3>
           <div className="whitespace-pre-wrap rounded-lg bg-gray-50 p-4 leading-5">
             {project?.field}
+          </div>
+        </div>
+        <div className="space-y-4">
+          <h3 className="font-bold text-gray-600">상세 설명</h3>
+          <div className="whitespace-pre-wrap rounded-lg bg-gray-50 p-4 leading-5">
+            {project?.introduction}
           </div>
         </div>
         <div className="space-y-4">

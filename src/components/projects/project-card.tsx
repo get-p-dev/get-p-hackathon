@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React from "react";
+import TagList from "../common/tag-list";
 import { ProjectProps } from "./project-list";
 
 const ProjectCard: React.FC<ProjectProps> = ({
@@ -29,16 +30,21 @@ const ProjectCard: React.FC<ProjectProps> = ({
           <span className="grow-0 text-lg font-bold text-blue-600">
             D-{new Date().getDate() - new Date(applicationDeadline).getDate()}
           </span>
+          <div className="flex h-7 w-7 flex-row items-center gap-2 overflow-hidden rounded-full bg-white">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={`/${location.slice(0, 4)}.png`}
+              alt={location.slice(0, 4)}
+            />
+          </div>
           <p className="grow-0 text-sm text-gray-400">{location}</p>
           <p className="flex grow justify-end font-semibold text-orange-400">
             {meeting} 미팅
           </p>
         </div>
         <div className="text-lg font-bold">{title}</div>
-        <div className="flex flex-row gap-2 text-sm text-gray-400">
-          {hashtags.map((data, index) => {
-            return <p key={index}>{data}</p>;
-          })}
+        <div className="flex flex-row gap-1 py-1 text-sm text-gray-400">
+          <TagList tags={hashtags} />
         </div>
         <div className="flex flex-row items-center justify-between">
           <p className="text-md font-semibold text-blue-600">

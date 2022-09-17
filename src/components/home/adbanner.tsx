@@ -53,9 +53,7 @@ const CardLink: React.FC<bannerProps & { size: boolean }> = ({
       <Link href={props.url} passHref>
         <a
           target="_blank"
-          className={`relative aspect-[16/9] w-full shrink-0 cursor-pointer overflow-hidden rounded-lg border-2 transition-transform duration-500 ease-out ${
-            size ? "shadow-xl" : "shadow-none"
-          }`}
+          className={`relative aspect-[16/9] w-full shrink-0 cursor-pointer overflow-hidden rounded-lg border-2 shadow-2xl transition-transform duration-500 ease-out`}
         >
           <div className={`${props.bgcolor} absolute inset-0 h-full`}></div>
           {props.src && (
@@ -78,7 +76,7 @@ const ArrowButton = ({
 }) => {
   return (
     <button
-      className={`absolute top-[50%] z-10 -translate-y-1/2 rounded-full border-2 bg-black/50 p-1 transition-colors ease-in-out hover:bg-black/90`}
+      className={`absolute top-[50%] z-10 -translate-y-1/2 rounded-full border-2 bg-black/50 p-0.5 transition-colors ease-in-out hover:bg-black/90`}
       style={{ [dir]: "1rem" }}
     >
       {dir === "left" ? (
@@ -123,7 +121,7 @@ const AdBanner = () => {
   };
 
   return (
-    <section className="relative w-full scroll-mx-6 overflow-hidden scroll-smooth py-4">
+    <section className="relative w-full scroll-mx-6 overflow-hidden scroll-smooth py-16">
       <div className="relative mx-auto w-full max-w-2xl">
         <p className="md:text-md pointer-events-none absolute right-5 top-4 z-10 rounded-full border-2 bg-black/50 px-3 py-1 text-xs text-base-100">{`${
           slide + 1

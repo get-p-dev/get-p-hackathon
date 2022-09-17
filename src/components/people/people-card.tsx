@@ -52,7 +52,7 @@ const PeopleCard: React.FC<PeopleProps> = (person) => {
             </span>
             <p className="text-sm text-gray-400">{person.activityArea || 0}</p>
           </div>
-          <p className="text-lg font-extrabold">{person.name || "anonymous"}</p>
+          <p className="text-lg font-bold">{person.name || "anonymous"}</p>
           <p className="line-clamp-1 sm:line-clamp-2 max-w-sm pr-6 text-xs text-gray-600">
             {person.introduction || "undefined introduction"}
           </p>
