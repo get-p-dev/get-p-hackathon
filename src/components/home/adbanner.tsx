@@ -56,7 +56,6 @@ const CardLink: React.FC<bannerProps & { size: boolean }> = ({
           className={`relative aspect-[16/9] w-full shrink-0 cursor-pointer overflow-hidden rounded-lg border-2 transition-transform duration-500 ease-out ${
             size ? "shadow-xl" : "shadow-none"
           }`}
-          style={{ scale: size ? "100%" : "90%" }}
         >
           <div className={`${props.bgcolor} absolute inset-0 h-full`}></div>
           {props.src && (
@@ -101,16 +100,16 @@ const AdBanner = () => {
   const [slide, setSlide] = useState(1);
   const banners = useBanner();
 
-  // useEffect(() => {
-  //   const id = setInterval(() => {
-  //     if (slide >= banners.length - 1) {
-  //       setSlide(0);
-  //     } else {
-  //       setSlide((v) => v + 1);
-  //     }
-  //   }, 3000);
-  //   return () => clearInterval(id);
-  // }, [slide, banners.length]);
+  useEffect(() => {
+    const id = setInterval(() => {
+      if (slide >= banners.length - 1) {
+        setSlide(0);
+      } else {
+        setSlide((v) => v + 1);
+      }
+    }, 3000);
+    return () => clearInterval(id);
+  }, [slide, banners.length]);
 
   const handleClick = (dir: string) => {
     // console.log(dir, v);
@@ -124,7 +123,7 @@ const AdBanner = () => {
   };
 
   return (
-    <section className="relative mx-auto w-full scroll-mx-6 overflow-hidden scroll-smooth py-4">
+    <section className="relative w-full scroll-mx-6 overflow-hidden scroll-smooth py-4">
       <div className="relative mx-auto w-full max-w-2xl">
         <p className="md:text-md pointer-events-none absolute right-5 top-4 z-10 rounded-full border-2 bg-black/50 px-3 py-1 text-xs text-base-100">{`${
           slide + 1

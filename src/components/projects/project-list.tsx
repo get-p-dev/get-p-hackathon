@@ -35,8 +35,8 @@ const ProjectList = () => {
   }
 
   return (
-    <section className="px-4 py-4">
-      <article className="flex flex-col">
+    <section className="mx-auto max-w-6xl py-4">
+      <article className="flex flex-col lg:grid lg:grid-flow-row lg:grid-cols-2 lg:grid-rows-2">
         {projects &&
           projects?.length > 0 &&
           projects.map((project) => {

@@ -7,10 +7,12 @@ export default function TagInput({
   selectedTag,
   setSelectedTag,
   register,
+  placeholder = "태그를 입력하세요",
 }: {
   selectedTag: string[];
   setSelectedTag: Dispatch<SetStateAction<string[]>>;
   register: any;
+  placeholder?: string;
 }) {
   const [tag, setTag] = useState("");
   const [animationRef] = useAutoAnimate<HTMLUListElement>();
@@ -37,8 +39,8 @@ export default function TagInput({
         {selectedTag.length < 8 && (
           <input
             {...register}
-            placeholder="태그를 입력해주세요."
-            className="h-fit w-fit border-white bg-transparent py-1 px-2 outline-none ring-white"
+            placeholder={placeholder}
+            className="h-fit w-full border-white bg-transparent py-1 px-2 outline-none ring-white"
             disabled={exceededTagsLimit}
             value={tag}
             onKeyPress={(e) => {

@@ -83,7 +83,9 @@ export default function ProjectDetail() {
         <div className="flex flex-col gap-4">
           <div className="flex justify-between rounded-lg bg-blue-50 p-4 font-semibold">
             <span>프로젝트 성공 보수</span>{" "}
-            <span className="text-blue-600">{project?.successPay}</span>
+            <span className="text-blue-600">
+              {project?.successPay.toLocaleString()}원
+            </span>
           </div>
         </div>
         <div className="space-y-4">

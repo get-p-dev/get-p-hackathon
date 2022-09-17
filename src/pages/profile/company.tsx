@@ -1,5 +1,7 @@
+import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { useState } from "react";
 import { useCookies } from "react-cookie";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -16,7 +18,9 @@ const CompanyProfileSchema = z.object({
   userObjectId: z.string(),
 });
 
-type CompanyProfileProps = z.infer<typeof CompanyProfileSchema>;
+type CompanyProfileProps = z.infer<typeof CompanyProfileSchema> & {
+  profilePicture: FileList;
+};
 
 async function onValid(
   data: CompanyProfileProps,
@@ -45,6 +49,7 @@ export default function Company() {
   } = useForm<CompanyProfileProps>();
   const router = useRouter();
   const [cookie] = useCookies(["token"]);
+  const [preview, setPreview] = useState("");
 
   return (
     <main className="grid place-items-center py-8 px-4 lg:px-0">
@@ -100,6 +105,39 @@ export default function Company() {
                 className="textarea textarea-bordered w-full max-w-lg"
                 {...register("introduction", { required: true })}
               />
+              <h2
+                className="label tooltip tooltip-right w-fit justify-start"
+                data-tip="(매출, 재무, 근로 환경 등 귀사를 잘 표현할 수 있는 자료를 사진의 형태로 업로드 해주세요)"
+              >
+                <span className="label-text flex flex-row">
+                  추가 자료{" "}
+                  <QuestionMarkCircleIcon className="h-4 w-6 text-red-400" />
+                </span>
+              </h2>
+              <input
+                type="file"
+                className="hidden w-full max-w-lg"
+                accept="image/*"
+                id="profilePicture"
+                {...register("profilePicture", {
+                  required: true,
+                  onChange: (e) => {
+                    if (!e?.target?.files) return;
+                    if (!e.target.files[0]) return;
+                    setPreview(URL.createObjectURL(e.target.files[0]));
+                  },
+                })}
+              />
+
+              <label
+                htmlFor="profilePicture"
+                className="mx-auto w-fit cursor-pointer"
+              >
+                <div className="mx-4 overflow-hidden rounded-lg border-2 bg-cover transition-all duration-300 ease-out hover:scale-105 hover:shadow-lg">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={preview || "/banner2.jpeg"} alt="profile-picture" />
+                </div>
+              </label>
               <label className="label">
                 <span className="label-text">대표자 전화번호</span>
               </label>

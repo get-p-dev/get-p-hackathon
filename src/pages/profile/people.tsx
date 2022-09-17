@@ -135,7 +135,7 @@ export default function People() {
 
               <label className="label" htmlFor="tags">
                 <span className="label-text">
-                  태그를 작성해주세요. (최대 8개)
+                  자신을 설명하는 태그를 작성해주세요.
                 </span>
               </label>
 
@@ -143,6 +143,9 @@ export default function People() {
                 register={register("hashtags")}
                 selectedTag={selectedTag}
                 setSelectedTag={setSelectedTag}
+                placeholder={
+                  "태그를 입력하세요 (예: MBTI, 업무 성향, 기술 스택 등)"
+                }
               />
             </div>
             <div className="card-actions">

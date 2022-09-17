@@ -25,21 +25,25 @@ export default function PeopleDetail() {
   const { data: people, isLoading } = useQuery<any>(
     ["people", userId],
     async () => {
-      const res = await axios.get("http://localhost:8080/people/" + userId);
-      const people = await res.data;
-      const image = await axios.get(
-        "http://localhost:8080/images/" + people.image,
-        {
-          responseType: "blob",
-        }
-      );
-      const peopleWithImage = {
-        ...people,
-        image: URL.createObjectURL(
-          new Blob([image.data], { type: image.headers["content-type"] })
-        ),
-      };
-      return peopleWithImage;
+      try {
+        const res = await axios.get("http://localhost:8080/people/" + userId);
+        const people = await res.data;
+        const image = await axios.get(
+          "http://localhost:8080/images/" + people.image,
+          {
+            responseType: "blob",
+          }
+        );
+        const peopleWithImage = {
+          ...people,
+          image: URL.createObjectURL(
+            new Blob([image.data], { type: image.headers["content-type"] })
+          ),
+        };
+        return peopleWithImage;
+      } catch {
+        return null;
+      }
     },
     {
       enabled: !!userId,
@@ -54,8 +58,8 @@ export default function PeopleDetail() {
     <>
       <BodyLayout>
         <>
-          <section className="relative flex flex-col gap-4 border-gray-100 px-4 pt-[20%] pb-24 sm:pb-2">
-            <h2 className="text-lg font-semibold">{`${people?.name}님의 프로필`}</h2>
+          <section className="relative mx-auto flex max-w-2xl flex-col gap-4 border-gray-100 px-4 pt-10 pb-24 sm:pb-2">
+            <h2 className="mx-auto text-lg font-semibold">{`${people?.name}님의 프로필`}</h2>
             <div className="flex flex-col items-center gap-4 py-4">
               <div className="relative aspect-square w-40 overflow-hidden rounded-[35%]">
                 {/* eslint-disable @next/next/no-img-element */}

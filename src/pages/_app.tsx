@@ -11,14 +11,7 @@ import type { AppRouter } from "../server/router";
 import "../styles/globals.css";
 import { CookiesProvider } from "react-cookie";
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 60 * 5,
-      refetchOnWindowFocus: false,
-    },
-  },
-});
+const queryClient = new QueryClient();
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
