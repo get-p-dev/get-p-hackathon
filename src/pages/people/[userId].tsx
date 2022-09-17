@@ -1,4 +1,4 @@
-import { Bars3Icon } from "@heroicons/react/24/outline";
+import { ArrowDownTrayIcon, Bars3Icon } from "@heroicons/react/24/outline";
 import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -107,6 +107,18 @@ export default function PeopleDetail() {
                 </span>
               </div>
             </div>
+            <h3 className="font-bold text-gray-600">태그</h3>
+            <div className="flex flex-row gap-2 whitespace-pre-wrap rounded-lg bg-gray-50 p-4">
+              <TagList tags={people?.hashtags} />
+            </div>
+            <div className="space-y-4">
+              <h3 className="font-bold text-gray-600">포트폴리오</h3>
+              <div className="flex cursor-pointer flex-row gap-2 whitespace-pre-wrap rounded-lg bg-gray-50 p-4 underline">
+                <ArrowDownTrayIcon className="h-6 w-6" />
+                {people?.name}의 포트폴리오.zip
+              </div>
+            </div>
+
             <div className="space-y-4">
               <h3 className="font-bold text-gray-600">학교</h3>
               <div className="rounded-lg bg-gray-50 p-4">
@@ -131,25 +143,6 @@ export default function PeopleDetail() {
                 {people?.introduction || "소개 정보가 없습니다."}
               </div>
             </div>
-            {/* <div className="space-y-4">
-          <h3 className="font-bold text-gray-600">포트폴리오/첨부 파일</h3>
-          {data?.attached?.map((item, index) => (
-            <div
-              className="flex flex-row items-center justify-between p-4 underline bg-gray-100 rounded-lg underline-offset-1"
-              key={`${item[0]}_${index}`}
-            >
-              {item}
-              <Image
-                src="/download.svg"
-                alt="download"
-                width={24}
-                height={24}
-              />
-            </div>
-          ))}
-        </div> */}
-            <h3 className="font-bold text-gray-600">태그</h3>
-            <TagList tags={people?.hashtags} />
             <div className="fixed bottom-4 left-4 right-4 flex h-16 flex-row items-center gap-2 sm:static sm:mt-4 sm:mb-4 sm:w-full">
               <button className="btn btn-primary grow">의뢰하기</button>
               <LikeButton

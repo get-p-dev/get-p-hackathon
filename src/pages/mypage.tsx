@@ -64,7 +64,10 @@ export default function PeopleDetail() {
       <BodyLayout>
         <>
           <section className="relative mx-auto mb-24 flex max-w-2xl flex-col gap-4 border-gray-100 px-4 pt-12">
-            <h2 className="mx-auto text-lg font-semibold">{`${mydata?.name}님의 프로필`}</h2>
+            <h2 className="mx-auto text-lg font-semibold">{`${mydata?.name}님의 마이페이지`}</h2>
+            <div className="btn btn-outline btn-ghost mx-auto w-full max-w-lg">
+              수정하기
+            </div>
             <div className="flex flex-col items-center gap-4 py-4">
               <div className="relative aspect-square w-40 overflow-hidden rounded-[35%]">
                 {/* eslint-disable @next/next/no-img-element */}
@@ -113,20 +116,23 @@ export default function PeopleDetail() {
               </div>
             </div>
             <div className="space-y-4">
-              <h3 className="font-bold text-gray-600">소개</h3>
-              <div className="whitespace-pre-wrap rounded-lg bg-gray-50 p-4">
-                {mydata?.introduction || "소개 정보가 없습니다."}
-              </div>
-            </div>
-            <div className="space-y-4">
               <h3 className="font-bold text-gray-600">포트폴리오</h3>
-              <div className="flex flex-row gap-2 whitespace-pre-wrap rounded-lg bg-gray-50 p-4 underline">
+              <div className="flex cursor-pointer flex-row gap-2 whitespace-pre-wrap rounded-lg bg-gray-50 p-4 underline">
                 <ArrowDownTrayIcon className="h-6 w-6" />
                 {mydata?.name}의 포트폴리오.zip
               </div>
             </div>
             <h3 className="font-bold text-gray-600">태그</h3>
-            <TagList tags={mydata?.hashtags} />
+            <div className="flex flex-row gap-2 whitespace-pre-wrap rounded-lg bg-gray-50 p-4">
+              <TagList tags={mydata?.hashtags} />
+            </div>
+            <div className="space-y-4">
+              <h3 className="font-bold text-gray-600">소개</h3>
+              <div className="whitespace-pre-wrap rounded-lg bg-gray-50 p-4">
+                {mydata?.introduction || "소개 정보가 없습니다."}
+              </div>
+            </div>
+
             <div className="space-y-4">
               <h3 className="font-bold text-gray-600">학교</h3>
               <div className="rounded-lg bg-gray-50 p-4">
