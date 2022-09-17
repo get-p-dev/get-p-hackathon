@@ -73,15 +73,15 @@ const ProjectUserChat = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const onValid: SubmitHandler<any> = async (data) => {
-    resetField("chat");
     scrollRef?.current?.scrollIntoView();
+    resetField("chat");
   };
-  console.log(data.length);
 
   useEffect(() => {
     const id = setInterval(() => {
       setData((prev) => {
         if (prev.length < messages.length) {
+          scrollRef?.current?.scrollIntoView();
           return [...prev, messages[prev.length]];
         }
         return prev;
