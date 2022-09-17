@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import { ArrowDownTrayIcon } from "@heroicons/react/24/outline";
 
 const Message = ({ chat, reversed }: any) => {
   console.log("reversed >> ", reversed);
@@ -8,12 +9,20 @@ const Message = ({ chat, reversed }: any) => {
       {!reversed ? (
         <div className="flex items-center gap-2">
           <div className="flex h-fit w-fit flex-row items-start overflow-hidden rounded-3xl">
-            <Image src={"/profile.svg"} alt="profile" width={60} height={60} />
+            {chat?.user?.userType === "피플" ? (
+              <Image
+                src={"/profile.svg"}
+                alt="profile"
+                width={60}
+                height={60}
+              />
+            ) : (
+              <Image src={"/p.svg"} alt="profile" width={60} height={60} />
+            )}
           </div>
           <div>
             <p className="font-semibold">{chat.user.name}</p>
             <p>
-              <span className="text-gray-600">{chat.user.name}</span>{" "}
               <span className="font-extralight text-gray-400">
                 {chat.user.userType}
               </span>
@@ -34,12 +43,13 @@ const Message = ({ chat, reversed }: any) => {
               reversed
                 ? "rounded-tl-lg bg-blue-100"
                 : "rounded-tr-lg bg-gray-100"
-            }`}
+            } ${chat?.underline ? "cursor-pointer underline" : ""}`}
         >
-          {chat.chat}
+          {chat.message}
+          {chat?.underline && <ArrowDownTrayIcon className="ml-7 h-6 w-6" />}
         </div>
         <div className={`"text-sm" ${reversed ? "text-right" : "text-left"}`}>
-          {chat.createdAt}
+          {chat?.createdAt}
         </div>
       </div>
     </div>
