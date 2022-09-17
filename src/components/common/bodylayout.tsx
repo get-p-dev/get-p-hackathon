@@ -18,12 +18,12 @@ export function BodyLayout({ children }: { children: ReactNode }) {
 
   return (
     <>
-      <div className="drawer-mobile drawer relative">
+      <div className="drawer drawer-mobile relative">
         <input id="sidebar" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content relative">
           <div className="navbar sticky top-0 isolate z-50 border-b-2 bg-base-100">
             <div className="flex-none lg:hidden">
-              <label htmlFor="sidebar" className="btn btn-square btn-ghost">
+              <label htmlFor="sidebar" className="btn btn-ghost btn-square">
                 <Bars3Icon className="h-6 w-6" />
               </label>
             </div>
@@ -55,7 +55,7 @@ export function BodyLayout({ children }: { children: ReactNode }) {
               </>
             )}
           </div>
-          <main className="mx-auto w-full">{children}</main>
+          <main className="relative mx-auto w-full">{children}</main>
         </div>
         <div className="drawer-side">
           <label htmlFor="sidebar" className="drawer-overlay"></label>

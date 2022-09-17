@@ -21,11 +21,11 @@ const ProjectCard: React.FC<ProjectProps> = ({
 
   return (
     <section
-      className="transition-color mx-auto flex w-full cursor-pointer flex-col gap-1 border-gray-100 px-6 py-5 duration-300 focus-within:bg-gray-50 hover:bg-gray-100"
+      className="mx-auto flex w-full cursor-pointer flex-col gap-1 border-gray-100 p-2"
       key={_id}
       onClick={() => router.push(`/projects/${_id}`)}
     >
-      <div className="mx-auto w-full max-w-2xl">
+      <div className="mx-auto w-full max-w-2xl overflow-hidden rounded-lg px-6 py-4 transition-colors duration-300 hover:bg-gray-100">
         <div className="flex flex-row items-center justify-between gap-2">
           <span className="grow-0 text-lg font-bold text-blue-600">
             D-{new Date().getDate() - new Date(applicationDeadline).getDate()}

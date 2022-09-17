@@ -56,10 +56,10 @@ export default function ProjectCreate() {
 
   return (
     <BodyLayout>
-      <main className="grid place-items-center px-4 py-8 lg:px-0">
+      <main className="grid place-items-center px-4 pb-12 lg:px-0">
         <div className="w-full max-w-4xl bg-base-100">
           <div className="px-4">
-            <h2 className="pt-8 text-3xl font-bold">프로젝트 등록</h2>
+            <h2 className="pt-8 text-2xl font-bold">프로젝트 등록</h2>
             <form
               onSubmit={handleSubmit(async (data: ProjectProps) => {
                 const req = {
@@ -72,7 +72,7 @@ export default function ProjectCreate() {
                   router.push("/projects/" + res.data._id);
                 }
               })}
-              className="mt-10 flex flex-col gap-4"
+              className="mt-4 flex flex-col gap-4"
             >
               <div className="form-control w-full max-w-4xl">
                 <label className="label">

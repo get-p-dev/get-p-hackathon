@@ -34,9 +34,9 @@ const PeopleCard: React.FC<PeopleProps> = (person) => {
   return (
     <div
       onClick={() => handleClick(router, person._id)}
-      className="transition-color mx-auto flex w-full cursor-pointer flex-row items-center gap-5 divide-x-2 divide-y-2 divide-solid divide-gray-400 border-gray-100 px-8 py-5 duration-300 focus-within:bg-gray-50 hover:bg-gray-100"
+      className="mx-auto flex w-full cursor-pointer flex-row items-center border-gray-100 p-2"
     >
-      <div className="mx-auto flex w-full max-w-2xl flex-row gap-4">
+      <div className="mx-auto flex w-full max-w-2xl flex-row gap-4 rounded-lg px-6 py-4 transition-colors duration-300 hover:bg-gray-100">
         <div className="relative aspect-square h-32 w-32 shrink-0 overflow-hidden rounded-3xl sm:h-36 sm:w-36">
           <Image
             src={profileImage || "/profile.svg"}

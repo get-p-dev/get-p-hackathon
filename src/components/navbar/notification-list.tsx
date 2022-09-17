@@ -9,7 +9,7 @@ export default function NotificationList({
   return (
     <div
       tabIndex={0}
-      className="dropdown-content menu mt-3 h-72 w-60 divide-y divide-solid overflow-y-auto rounded-lg border-2 bg-base-100 shadow-lg"
+      className="dropdown-content menu mt-3 h-72 w-72 divide-y divide-solid overflow-y-auto rounded-lg border-2 bg-base-100 shadow-lg"
     >
       {notifications.map((item) => {
         return (

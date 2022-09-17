@@ -63,7 +63,7 @@ export default function PeopleDetail() {
     <>
       <BodyLayout>
         <>
-          <section className="relative mx-auto flex max-w-2xl flex-col gap-4 border-gray-100 px-4 pt-12 pb-24 sm:pb-2">
+          <section className="relative mx-auto mb-24 flex max-w-2xl flex-col gap-4 border-gray-100 px-4 pt-12">
             <h2 className="mx-auto text-lg font-semibold">{`${mydata?.name}님의 프로필`}</h2>
             <div className="flex flex-col items-center gap-4 py-4">
               <div className="relative aspect-square w-40 overflow-hidden rounded-[35%]">

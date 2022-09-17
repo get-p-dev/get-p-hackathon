@@ -2,7 +2,6 @@ import {
   ArrowLeftCircleIcon,
   ArrowRightCircleIcon,
 } from "@heroicons/react/20/solid";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
 import { memo, useEffect, useState } from "react";
@@ -76,17 +75,17 @@ const ArrowButton = ({
 }) => {
   return (
     <button
-      className={`absolute top-[50%] z-10 -translate-y-1/2 rounded-full border-2 bg-black/50 p-0.5 transition-colors ease-in-out hover:bg-black/90`}
+      className={`absolute top-[50%] z-10 -translate-y-1/2 rounded-full border-2 bg-black/30 p-0.5 transition-colors ease-in-out hover:bg-black/90`}
       style={{ [dir]: "1rem" }}
     >
       {dir === "left" ? (
         <ArrowLeftCircleIcon
-          className="h-12 w-12 text-base-200"
+          className="h-12 w-12 text-white/50"
           onClick={() => handleClick(dir)}
         />
       ) : (
         <ArrowRightCircleIcon
-          className="h-12 w-12 text-base-200"
+          className="h-12 w-12 text-white/50"
           onClick={() => handleClick(dir)}
         />
       )}
